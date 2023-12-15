@@ -41,7 +41,7 @@ sequence = input("Enter the sequence:")
 lst = []
 for el in gram.rules[0].right:
     lst.append(el)
-ASDR = AscendentRevenire("q",1,[TerminalPoz(gram.rules[0].left,1)],lst,len(sequence))
+ASDR = AscendentRevenire("q",1,[],["S"],len(sequence))
 while ASDR.stare != "t" and ASDR.stare != "e":
     if ASDR.stare == "q":
         if len(ASDR.enterQueue)==0:
@@ -57,7 +57,7 @@ while ASDR.stare != "t" and ASDR.stare != "e":
                 ASDR.pushA(TerminalPoz(A,1))
                 ASDR.pushB(TerminalPoz(gram.getRule(A,1).right,-1))
             else:
-                if gram.containsTemrinal(varfB):
+                if varfB == sequence[ASDR.poz-1]:
                     ASDR.poz = ASDR.poz + 1
                     xi = ASDR.popB()
                     ASDR.pushA(TerminalPoz(xi,-1))
@@ -79,7 +79,8 @@ while ASDR.stare != "t" and ASDR.stare != "e":
                     ASDR.stare = "q"
                     ASDR.popA()
                     ASDR.pushA(TerminalPoz(varfA.terminal,varfA.poz + 1))
-                    ASDR.popBRule()
+                    rule2 = gram.getRule(varfA.terminal, varfA.poz)
+                    ASDR.popBRule(rule2.right)
                     ASDR.pushB(TerminalPoz(rule.right,-1))
                 else:
                     if ASDR.poz == 1 and len(ASDR.enterQueue) == 0:

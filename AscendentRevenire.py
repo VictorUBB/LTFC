@@ -16,7 +16,7 @@ class AscendentRevenire:
         self.workQueue = a
         self.enterQueue = b
         #marimea sirului de verificat
-        self.sizeIn = n
+        self.sizeIn = n +1
 
     def getVarfB(self):
         return self.enterQueue[0]
@@ -27,7 +27,7 @@ class AscendentRevenire:
     def popBRule(self,rule):
         rule = rule[::-1]
         for i in range(len(rule)):
-            self.enterQueue.pop
+            self.enterQueue.pop(0)
     def popA(self):
         return self.workQueue.pop(0)
     def pushA(self,elem):
