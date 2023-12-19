@@ -44,7 +44,7 @@ for el in gram.rules[0].right:
 ASDR = AscendentRevenire("q",1,[],["S"],len(sequence))
 while ASDR.stare != "t" and ASDR.stare != "e":
     if ASDR.stare == "q":
-        if len(ASDR.enterQueue)==0:
+        if len(ASDR.enterQueue) == 0:
             if ASDR.poz == ASDR.sizeIn:
                 ASDR.stare = "t"
             else:
@@ -57,42 +57,63 @@ while ASDR.stare != "t" and ASDR.stare != "e":
                 ASDR.pushA(TerminalPoz(A,1))
                 ASDR.pushB(TerminalPoz(gram.getRule(A,1).right,-1))
             else:
-                if varfB == sequence[ASDR.poz-1]:
-                    ASDR.poz = ASDR.poz + 1
-                    xi = ASDR.popB()
-                    ASDR.pushA(TerminalPoz(xi,-1))
+                if ASDR.poz < ASDR.sizeIn :
+                    if varfB == sequence[ASDR.poz-1]:
+                        ASDR.poz = ASDR.poz + 1
+                        xi = ASDR.popB()
+                        ASDR.pushA(TerminalPoz(xi,-1))
+                    else:
+                        ASDR.stare = "r"
                 else:
                     ASDR.stare = "r"
     else:
         if ASDR.stare == "r":
-            varf = ASDR.getVarfA()
+            if len(ASDR.workQueue) != 0:
+                varf = ASDR.getVarfA()
             #terminal
-            if varf.poz == -1:
-                ASDR.poz = ASDR.poz - 1
-                a = ASDR.popA()
-                ASDR.pushB(a)
-            else:
-                varfA = ASDR.getVarfA()
-                rule = gram.getRule(varfA.terminal,varfA.poz + 1)
-                if rule != None:
-                    #exists Aj+1
-                    ASDR.stare = "q"
-                    ASDR.popA()
-                    ASDR.pushA(TerminalPoz(varfA.terminal,varfA.poz + 1))
-                    rule2 = gram.getRule(varfA.terminal, varfA.poz)
-                    ASDR.popBRule(rule2.right)
-                    ASDR.pushB(TerminalPoz(rule.right,-1))
+                if varf.poz == -1:
+                    ASDR.poz = ASDR.poz - 1
+                    a = ASDR.popA()
+                    ASDR.pushB(a)
                 else:
-                    if ASDR.poz == 1 and len(ASDR.enterQueue) == 0:
-                        s= "e"
+                    varfA = ASDR.getVarfA()
+                    rule = gram.getRule(varfA.terminal,varfA.poz + 1)
+                    if rule != None:
+                        #exists Aj+1
+                        ASDR.stare = "q"
+                        ASDR.popA()
+                        ASDR.pushA(TerminalPoz(varfA.terminal,varfA.poz + 1))
+                        rule2 = gram.getRule(varfA.terminal, varfA.poz)
+                        ASDR.popBRule(rule2.right)
+                        ASDR.pushB(TerminalPoz(rule.right,-1))
                     else:
-                        Aj = ASDR.popA()
-                        ASDR.pushB(Aj)
+                        if ASDR.poz == 1 and (len(ASDR.enterQueue) == 0 or ASDR.getVarfA().terminal == 'S'):
+                            ASDR.stare= "e"
+                        else:
+                            # Aj = ASDR.popA()
+                            # ASDR.pushB(Aj)
+                            rule = gram.getRule(varfA.terminal, varfA.poz)
+                            ASDR.popBRule(rule.right)
+                            Aj = ASDR.popA()
+                            ASDR.pushB(Aj)
+            else:
+                if ASDR.poz == 1 and (len(ASDR.enterQueue) == 0 or ASDR.getVarfA() == 'S' ):
+                    s = "e"
+                else:
+                    rule = gram.getRule(varfA.terminal, varfA.poz)
+                    ASDR.popBRule(rule.right)
+                    Aj = ASDR.popA()
+                    ASDR.pushB(Aj)
 
 if ASDR.stare == 'e':
     print("Errror")
 else:
     print("Succes")
 
-
+def constructSirProd():
+    sirProd= ""
+    while len(ASDR.workQueue)!=0:
+        A =ASDR.getVarfA()
+        if gram.containsTemrinal(A):
+            sirProd += A
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
