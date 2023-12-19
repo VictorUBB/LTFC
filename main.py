@@ -37,7 +37,14 @@ for el in gram.rules:
     print(el)
 
 sequence = input("Enter the sequence:")
-
+def constructSirProd(ASDR1):
+    sirProd= ""
+    while len(ASDR1.workQueue)!=0:
+        A =ASDR1.getVarfA()
+        if gram.containsNonTerminal(A.terminal):
+            sirProd += str(A)
+        ASDR1.popA()
+    print("Sir prod:" + sirProd)
 lst = []
 for el in gram.rules[0].right:
     lst.append(el)
@@ -109,11 +116,8 @@ if ASDR.stare == 'e':
     print("Errror")
 else:
     print("Succes")
+    constructSirProd(ASDR)
 
-def constructSirProd():
-    sirProd= ""
-    while len(ASDR.workQueue)!=0:
-        A =ASDR.getVarfA()
-        if gram.containsTemrinal(A):
-            sirProd += A
+
+
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
