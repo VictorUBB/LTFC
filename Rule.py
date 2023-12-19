@@ -12,6 +12,6 @@ class TerminalPoz:
         self.poz = poz
     def __str__(self):
         if self.poz!=-1 :
-            return str(self.terminal) + str(self.poz)+"<-"
+            return str(self.terminal) + str(self.poz)
         else:
             return str(self.terminal)+"<-"
